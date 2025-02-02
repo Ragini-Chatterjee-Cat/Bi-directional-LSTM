@@ -2,7 +2,11 @@ import tensorflow as tf
 from tensorflow.keras.layers import (
     Input, Embedding, SpatialDropout1D, Bidirectional, LSTM,
     GlobalMaxPooling1D, GlobalAveragePooling1D, Concatenate,
+<<<<<<< Updated upstream
     BatchNormalization, Dropout, Dense, Add
+=======
+    Dense, Dropout
+>>>>>>> Stashed changes
 )
 from tensorflow.keras.models import Model
 from tensorflow.keras import backend
@@ -10,6 +14,7 @@ from tensorflow.keras import backend
 
 def getModelBiLSTM(seqLen, vocabSize, gloveVecDim, weightMatrix, isTrainable=False, rnnUnits=128):
     """
+<<<<<<< Updated upstream
     Defines the BiLSTM model architecture for toxic comment classification.
 
     Parameters:
@@ -98,4 +103,60 @@ def getModelBiLSTM(seqLen, vocabSize, gloveVecDim, weightMatrix, isTrainable=Fal
         metrics=['accuracy']
     )
 
+=======
+    Define the BiLSTM model architecture for binary classification.
+
+    Parameters:
+    ----------
+    seq_len : int
+        Maximum sequence length of the input text.
+    vocab_size : int
+        Vocabulary size for the embedding layer.
+    glove_vec_dim : int
+        Dimensionality of the GloVe embeddings.
+    weight_matrix : numpy.ndarray
+        Pre-trained GloVe embedding weights matrix.
+    rnn_units : int, optional
+        Number of units for the LSTM layers (default is 128).
+
+    Returns:
+    -------
+    model : tf.keras.Model
+        The compiled BiLSTM model.
+    """
+    # Clear any previous session to avoid clutter in memory
+    backend.clear_session()
+
+    # Define the input layer
+    input_layer = Input(shape=(seq_len,), name="InputLayer")
+
+    # Add the embedding layer with pre-trained GloVe weights
+    embedding_layer = Embedding(
+        input_dim=vocab_size,
+        output_dim=glove_vec_dim,
+        weights=[weight_matrix],
+        trainable=False,  # GloVe embeddings are not trainable
+        name="EmbeddingLayer"
+    )(input_layer)
+
+    # Add Bidirectional LSTM layers
+    x = Bidirectional(LSTM(rnn_units, return_sequences=True, name="BiLSTM1"))(embedding_layer)
+    max_pool = GlobalMaxPooling1D(name="GlobalMaxPooling")(x)
+    avg_pool = GlobalAveragePooling1D(name="GlobalAveragePooling")(x)
+
+    # Concatenate the pooled outputs
+    combined = Concatenate(name="ConcatPooledOutputs")([max_pool, avg_pool])
+
+    # Add a dense layer with ReLU activation
+    x = Dense(512, activation='relu', name="DenseLayer")(combined)
+    x = Dropout(0.5, name="DropoutLayer")(x)
+
+    # Final output layer with sigmoid activation
+    output = Dense(1, activation='sigmoid', name="OutputLayer")(x)
+
+    # Define and compile the model
+    model = Model(inputs=input_layer, outputs=output, name="BiLSTMModel")
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+>>>>>>> Stashed changes
     return model
