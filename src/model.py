@@ -1,3 +1,15 @@
+"""
+BiLSTM model architecture for toxic comment classification without bias.
+"""
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import (
+    Input, Embedding, SpatialDropout1D, Bidirectional, LSTM,
+    GlobalMaxPooling1D, GlobalAveragePooling1D, Concatenate,
+    BatchNormalization, Dropout, Dense, Add
+)
+from tensorflow.keras import backend
+
+
 def getModelBiLSTM(seqLen, vocabSize, gloveVecDim, weightMatrix, isTrainable=False, rnnUnits=128):
     """
     Defines the BiLSTM model architecture for toxic comment classification.

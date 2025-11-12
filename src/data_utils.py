@@ -1,6 +1,51 @@
+"""
+Data loading and preprocessing utilities for BiLSTM toxic comment classification.
+"""
 import pandas as pd
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+
+def load_data(data_dir='../data'):
+    """
+    Loads train, validation, and test datasets from CSV files.
+
+    Args:
+        data_dir (str): Directory containing the data files
+
+    Returns:
+        tuple: (train_x, train_y, val_x, val_y, test_x)
+    """
+    train_x = pd.read_csv(f'{data_dir}/train_x.csv')
+    train_y = pd.read_csv(f'{data_dir}/train_y.csv')
+    val_x = pd.read_csv(f'{data_dir}/val_x.csv')
+    val_y = pd.read_csv(f'{data_dir}/val_y.csv')
+    test_x = pd.read_csv(f'{data_dir}/test_x.csv')
+
+    return (
+        train_x['string'].fillna("").tolist(),
+        train_y,
+        val_x['string'].fillna("").tolist(),
+        val_y,
+        test_x['string'].fillna("").tolist()
+    )
+
+
+def preprocess_labels(train_y, val_y):
+    """
+    Preprocesses labels for training.
+
+    Args:
+        train_y: Training labels DataFrame
+        val_y: Validation labels DataFrame
+
+    Returns:
+        tuple: (train_labels, val_labels) as numpy arrays
+    """
+    train_labels = train_y.fillna(0).astype(int).values
+    val_labels = val_y.fillna(0).astype(int).values
+    return train_labels, val_labels
+
 
 def load_and_preprocess_data():
     """

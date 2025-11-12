@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Model files
+*.h5
+*.pkl
+*.ckpt
+
+# Results and logs
+results/
+logs/
+*.log
+
+# Data files (except glove embeddings might be large)
+# data/*.txt
+
+# OS
+.DS_Store
+Thumbs.db
