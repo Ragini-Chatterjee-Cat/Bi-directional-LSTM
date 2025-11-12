@@ -42,8 +42,9 @@ results/
 logs/
 *.log
 
-# Data files (except glove embeddings might be large)
-# data/*.txt
+# Data files (large files not suitable for git)
+data/*.txt
+data/*.csv
 
 # OS
 .DS_Store
